@@ -4,6 +4,10 @@ import helmet from "helmet";
 import morgan from "morgan";
 import dotenv from "dotenv";
 import { prisma } from "./config/prisma";
+import authRoutes from "./routes/auth.routes";
+import usersRoutes from "./routes/users.routes";
+import { errorHandler } from "./middleware/errorhandler";
+
 
 
 dotenv.config();
@@ -27,6 +31,12 @@ app.get("/api/v1/health", (req, res) => {
 });
 
 const port = Number(process.env.PORT) || 4000;
+
+app.use("/api/v1/auth", authRoutes);
+
+app.use("/api/v1/users", usersRoutes);
+
+app.use(errorHandler);
 
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);

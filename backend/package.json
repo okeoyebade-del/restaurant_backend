@@ -32,7 +32,10 @@
     "typescript": "^5.9.3"
   },
   "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
     "@types/cors": "^2.8.19",
+    "@types/hapi__joi": "^17.1.15",
+    "@types/jsonwebtoken": "^9.0.10",
     "@types/morgan": "^1.9.10",
     "@types/pg": "^8.16.0"
   }

@@ -2,7 +2,7 @@ import bcrypt from "bcryptjs";
 import { prisma } from "../config/prisma";
 import jwt from "jsonwebtoken";
 import type { SignOptions } from "jsonwebtoken";
-
+import { AppError } from "../utils/appError";
 
 type RegisterInput = {
   email: string;
@@ -22,9 +22,8 @@ export async function registerUser(input: RegisterInput) {
   });
 
   if (existing) {
-    // In real apps we return a proper error code. We'll do that next.
-    throw new Error("Email already in use");
-  }
+  throw new AppError("Email already in use", 409);
+}
 
   //  Hash password 
   const password_hash = await bcrypt.hash(input.password, 12);
@@ -87,14 +86,15 @@ export async function loginUser(input: LoginInput) {
   });
 
   if (!user) {
-    throw new Error("Invalid email or password");
-  }
+  throw new AppError("Invalid email or password", 401);
+}
+
 
   // 2) Check password
   const ok = await bcrypt.compare(input.password, user.password_hash);
   if (!ok) {
-    throw new Error("Invalid email or password");
-  }
+  throw new Error("Invalid email or password");
+}
 
   // 3) Create JWT token
   const accessToken = signAccessToken(user.id, user.role);

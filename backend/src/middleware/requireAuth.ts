@@ -20,7 +20,7 @@ export function requireAuth(req: Request, res: Response, next: NextFunction) {
     const payload = jwt.verify(token, process.env.JWT_SECRET!) as Payload;
 
     // attach userId to request
-    (req as any).userId = payload.sub;
+    req.userId = payload.sub;
 
     next();
   } catch {

@@ -5,7 +5,8 @@ import { prisma } from "../config/prisma";
 const router = Router();
 
 router.get("/me", requireAuth, async (req, res) => {
-  const userId = (req as any).userId as string;
+ const userId = req.userId!;
+  // const userId = (req as any).userId as string;
 
   const user = await prisma.user.findUnique({
     where: { id: userId },

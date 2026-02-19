@@ -28,6 +28,8 @@ model User {
   updated_at        DateTime @updatedAt
 
   profile           UserProfile?
+  healthReadings HealthReading[]
+
 }
 
 model UserProfile {
@@ -40,5 +42,23 @@ model UserProfile {
   health_goal       String
 
   user              User     @relation(fields: [user_id], references: [id])
+}
+
+model HealthReading {
+  id               String   @id @default(uuid())
+  user_id          String
+  recorded_at      DateTime @default(now())
+
+  weight_kg        Float
+  body_fat_percent Float?
+  muscle_mass_kg   Float?
+  bmi              Float?
+
+  created_at       DateTime @default(now())
+
+  user             User     @relation(fields: [user_id], references: [id])
+
+  @@index([user_id])
+  @@index([recorded_at])
 }
 

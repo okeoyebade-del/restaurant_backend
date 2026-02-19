@@ -1,8 +1,13 @@
 import { Request, Response, NextFunction } from "express";
+import { AppError } from "../utils/appError";
 
 export function errorHandler(err: any, req: Request, res: Response, next: NextFunction) {
-  console.error("ERROR:", err);
+  // If it's an AppError, we use its statusCode
+  if (err instanceof AppError) {
+    return res.status(err.statusCode).json({ message: err.message });
+  }
 
-  const message = err?.message || "Something went wrong";
-  return res.status(500).json({ message });
+  // Otherwise it's unexpected -> 500
+  console.error("UNEXPECTED ERROR:", err);
+  return res.status(500).json({ message: "Internal server error" });
 }
